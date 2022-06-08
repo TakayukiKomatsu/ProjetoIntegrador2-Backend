@@ -1,20 +1,21 @@
-version: '3.9'
+version: '3.5'
 
 services:
   postgres:
-    container_name: ${POSTGRES_CONTAINER_NAME}
+    container_name: postgres_container
     image: postgres
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+      POSTGRES_USER: ${POSTGRES_USERNAME}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      PGDATA: /data/postgres
     volumes:
       - postgres:/data/postgres
     ports:
-      - '${POSTGRES_PORT}:5432'
+      - '5432:5432'
     networks:
       - postgres
     restart: unless-stopped
+
 networks:
   postgres:
     driver: bridge
