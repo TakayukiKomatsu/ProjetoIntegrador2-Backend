@@ -6,31 +6,31 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./database/dev.sql"
 }
 
 model Event {
   id                            Int      @id @default(autoincrement())
   diaEvent                      DateTime
-  horaInicio                    String   @db.VarChar(45)
-  horaTermino                   String   @db.VarChar(45)
+  horaInicio                    String
+  horaTermino                   String
   qtdePessoas                   Int
   tempExterna                   Int
   tempSalaAtual                 Int
   tempDesejada                  Int
-  horaAcionamentoArCondicionado String   @db.VarChar(45)
+  horaAcionamentoArCondicionado String
   roomId                        Int
   Room                          Room     @relation(fields: [roomId], references: [id])
 }
 
 model Room {
   id        Int      @id @default(autoincrement())
-  descricao String   @db.VarChar(45)
-  pais      String   @db.VarChar(45)
-  estado    String   @db.VarChar(45)
-  cidade    String   @db.VarChar(45)
-  salaLocal String   @db.VarChar(45)
+  descricao String
+  pais      String
+  estado    String
+  cidade    String
+  salaLocal String
   Event     Event[]
   Sensor    Sensor[]
 
@@ -38,8 +38,8 @@ model Room {
 
 model Sensor {
   id           Int      @id @default(autoincrement())
-  tipo         String   @db.VarChar(45)
-  temperatura  String   @db.VarChar(45)
+  tipo         String
+  temperatura  String
   leitura      DateTime
   interLeitura Int
   roomId       Int
