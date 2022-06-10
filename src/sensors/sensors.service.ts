@@ -1,10 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { CreateSensorDto } from './dto/create-sensor.dto';
-import { UpdateSensorDto } from './dto/update-sensor.dto';
-
 @Injectable()
 export class SensorsService {
-  create(createSensorDto: CreateSensorDto) {
+  create(createSensorDto) {
     return 'This action adds a new sensor';
   }
 
@@ -16,7 +13,7 @@ export class SensorsService {
     return `This action returns a #${id} sensor`;
   }
 
-  update(id: number, updateSensorDto: UpdateSensorDto) {
+  update(id: number, updateSensorDto) {
     return `This action updates a #${id} sensor`;
   }
 

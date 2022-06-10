@@ -1,14 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { SensorsService } from './sensors.service';
-import { CreateSensorDto } from './dto/create-sensor.dto';
-import { UpdateSensorDto } from './dto/update-sensor.dto';
 
 @Controller('sensors')
 export class SensorsController {
   constructor(private readonly sensorsService: SensorsService) {}
 
   @Post()
-  create(@Body() createSensorDto: CreateSensorDto) {
+  create(@Body() createSensorDto) {
     return this.sensorsService.create(createSensorDto);
   }
 
@@ -23,7 +29,7 @@ export class SensorsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSensorDto: UpdateSensorDto) {
+  update(@Param('id') id: string, @Body() updateSensorDto) {
     return this.sensorsService.update(+id, updateSensorDto);
   }
 
