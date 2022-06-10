@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { PrismaService } from './prisma/prisma.service';
 import { EventsModule } from './events/events.module';
+import { RoomModule } from './room/room.module';
 
 @Module({
-  imports: [EventsModule],
+  imports: [EventsModule, RoomModule],
   controllers: [],
   providers: [PrismaService],
 })
