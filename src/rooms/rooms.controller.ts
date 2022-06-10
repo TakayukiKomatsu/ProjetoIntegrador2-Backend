@@ -7,10 +7,10 @@ import {
   Delete,
   Put,
 } from '@nestjs/common';
-import { RoomService } from './room.service';
+import { RoomService } from './rooms.service';
 import { Prisma, Room } from '@prisma/client';
 
-@Controller('room')
+@Controller('rooms')
 export class RoomController {
   constructor(private readonly roomService: RoomService) {}
 
