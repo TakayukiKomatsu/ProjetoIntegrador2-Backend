@@ -50,12 +50,9 @@ export class RoomService {
     }
   }
 
-  async update(
-    where: Prisma.RoomWhereUniqueInput,
-    data: Prisma.RoomUpdateInput,
-  ) {
+  async update(id: Prisma.RoomWhereUniqueInput, data: Prisma.RoomUpdateInput) {
     try {
-      return this.prisma.room.update({ where, data });
+      return this.prisma.room.update({ where: { id: Number(id) }, data });
     } catch (error) {
       console.log(error);
       throw new NotFoundException(error);
