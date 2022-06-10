@@ -6,6 +6,7 @@ import {
   Put,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { SensorsService } from './sensors.service';
 import { Prisma, Sensor } from '@prisma/client';
@@ -22,6 +23,13 @@ export class SensorsController {
   @Get()
   findAll(): Promise<Sensor[] | null> {
     return this.sensorsService.findAll();
+  }
+
+  @Get('/room')
+  findByRoom(
+    @Query('room') roomId: Prisma.RoomWhereUniqueInput,
+  ): Promise<Sensor[] | null> {
+    return this.sensorsService.findByRoom(roomId);
   }
 
   @Get(':id')

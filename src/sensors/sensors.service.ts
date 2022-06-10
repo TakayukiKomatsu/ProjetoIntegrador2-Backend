@@ -27,6 +27,15 @@ export class SensorsService {
     }
   }
 
+  findByRoom(id: Prisma.RoomWhereUniqueInput): Promise<Sensor[]> {
+    try {
+      return this.prisma.sensor.findMany({ where: { roomId: Number(id) } });
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException(error);
+    }
+  }
+
   findOne(id: Prisma.SensorWhereUniqueInput): Promise<Sensor | null> {
     try {
       return this.prisma.sensor.findUnique({ where: { id: Number(id) } });
