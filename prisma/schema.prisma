@@ -21,7 +21,7 @@ model Event {
   tempDesejada                  Int
   horaAcionamentoArCondicionado String
   roomId                        Int
-  Room                          Room     @relation(fields: [roomId], references: [id])
+  Room                          Room     @relation(fields: [roomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Room {
@@ -33,7 +33,6 @@ model Room {
   salaLocal String
   Event     Event[]
   Sensor    Sensor[]
-
 }
 
 model Sensor {
@@ -43,5 +42,5 @@ model Sensor {
   leitura      DateTime
   interLeitura Int
   roomId       Int
-  Room         Room     @relation(fields: [roomId], references: [id])
+  Room         Room     @relation(fields: [roomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
