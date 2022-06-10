@@ -1,24 +1,59 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { Room, Prisma } from '@prisma/client';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class RoomService {
-  create(createRoomDto) {
-    return 'This action adds a new room';
+  constructor(private prisma: PrismaService) {}
+  async create(data: Prisma.RoomCreateInput) {
+    try {
+      return this.prisma.room.create({ data });
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException(error);
+    }
   }
 
-  findAll() {
-    return `This action returns all room`;
+  async findAll(): Promise<Room[] | null> {
+    try {
+      return this.prisma.room.findMany();
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException(error);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} room`;
+  async findOne(where: Prisma.RoomWhereUniqueInput): Promise<Room | null> {
+    try {
+      return this.prisma.room.findUnique({ where });
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException(error);
+    }
   }
 
-  update(id: number, updateRoomDto) {
-    return `This action updates a #${id} room`;
+  async update(
+    where: Prisma.RoomWhereUniqueInput,
+    data: Prisma.RoomUpdateInput,
+  ) {
+    try {
+      return this.prisma.room.update({ where, data });
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException(error);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} room`;
+  async remove(id: Prisma.RoomWhereUniqueInput) {
+    try {
+      return this.prisma.room.delete({ where: { id: Number(id) } });
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException(error);
+    }
   }
 }
