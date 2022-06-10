@@ -27,6 +27,20 @@ export class RoomService {
     }
   }
 
+  async findWithAllData(): Promise<Room[] | null> {
+    try {
+      return this.prisma.room.findMany({
+        include: {
+          Event: true,
+          Sensor: true,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException(error);
+    }
+  }
+
   async findOne(where: Prisma.RoomWhereUniqueInput): Promise<Room | null> {
     try {
       return this.prisma.room.findUnique({ where });

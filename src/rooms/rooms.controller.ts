@@ -24,6 +24,11 @@ export class RoomController {
     return this.roomService.findAll();
   }
 
+  @Get('/allData')
+  findWithAllData(): Promise<Room[] | null> {
+    return this.roomService.findWithAllData();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: Prisma.RoomWhereUniqueInput) {
     return this.roomService.findOne(id);
