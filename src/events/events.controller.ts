@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Put,
+} from '@nestjs/common';
 import { EventsService } from './events.service';
 import { Event, Prisma } from '@prisma/client';
 
@@ -21,6 +29,14 @@ export class EventsController {
     @Param('id') id: Prisma.EventWhereUniqueInput,
   ): Promise<Event | null> {
     return this.eventsService.findOne(id);
+  }
+
+  @Put(':id')
+  update(
+    @Body() data: Prisma.EventUpdateInput,
+    @Param('id') id: Prisma.EventWhereUniqueInput,
+  ): Promise<Event | null> {
+    return this.eventsService.update(id, data);
   }
 
   @Delete(':id')
