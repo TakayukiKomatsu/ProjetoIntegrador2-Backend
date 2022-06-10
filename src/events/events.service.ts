@@ -38,13 +38,13 @@ export class EventsService {
   }
 
   async update(
-    where: Prisma.EventWhereUniqueInput,
+    id: Prisma.EventWhereUniqueInput,
     data: Prisma.EventUpdateInput,
   ) {
     try {
       return this.prisma.event.update({
         data,
-        where,
+        where: { id: Number(id) },
       });
     } catch (error) {
       console.log(error);
@@ -52,9 +52,9 @@ export class EventsService {
     }
   }
 
-  async remove(where: Prisma.EventWhereUniqueInput): Promise<Event> {
+  async remove(id: Prisma.EventWhereUniqueInput): Promise<Event> {
     try {
-      return this.prisma.event.delete({ where });
+      return this.prisma.event.delete({ where: { id: Number(id) } });
     } catch (error) {
       console.error(error);
       throw new NotFoundException(error);
