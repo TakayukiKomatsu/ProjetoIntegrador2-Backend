@@ -11,7 +11,7 @@ export class RoomService {
   constructor(private prisma: PrismaService) {}
   async create(data: Prisma.RoomCreateInput) {
     try {
-      return this.prisma.room.create({ data });
+      return await this.prisma.room.create({ data });
     } catch (error) {
       console.log(error);
       throw new BadRequestException(error);
@@ -20,7 +20,7 @@ export class RoomService {
 
   async findAll(): Promise<Room[] | null> {
     try {
-      return this.prisma.room.findMany();
+      return await this.prisma.room.findMany();
     } catch (error) {
       console.log(error);
       throw new NotFoundException(error);
@@ -29,7 +29,7 @@ export class RoomService {
 
   async findWithAllData(): Promise<Room[] | null> {
     try {
-      return this.prisma.room.findMany({
+      return await this.prisma.room.findMany({
         include: {
           Event: true,
           Sensor: true,
@@ -41,9 +41,12 @@ export class RoomService {
     }
   }
 
-  async findOne(where: Prisma.RoomWhereUniqueInput): Promise<Room | null> {
+  async findOne(id: Prisma.RoomWhereUniqueInput): Promise<Room | null> {
     try {
-      return this.prisma.room.findUnique({ where });
+      return await this.prisma.room.findUnique({
+        where: { id: Number(id) },
+        rejectOnNotFound: true,
+      });
     } catch (error) {
       console.log(error);
       throw new NotFoundException(error);
@@ -52,7 +55,10 @@ export class RoomService {
 
   async update(id: Prisma.RoomWhereUniqueInput, data: Prisma.RoomUpdateInput) {
     try {
-      return this.prisma.room.update({ where: { id: Number(id) }, data });
+      return await this.prisma.room.update({
+        where: { id: Number(id) },
+        data,
+      });
     } catch (error) {
       console.log(error);
       throw new NotFoundException(error);
@@ -61,7 +67,7 @@ export class RoomService {
 
   async remove(id: Prisma.RoomWhereUniqueInput) {
     try {
-      return this.prisma.room.delete({ where: { id: Number(id) } });
+      return await this.prisma.room.delete({ where: { id: Number(id) } });
     } catch (error) {
       console.log(error);
       throw new NotFoundException(error);

@@ -30,7 +30,10 @@ export class EventsService {
 
   async findOne(eventId: Prisma.EventWhereUniqueInput): Promise<Event | null> {
     try {
-      return this.prisma.event.findUnique({ where: { id: Number(eventId) } });
+      return this.prisma.event.findUnique({
+        where: { id: Number(eventId) },
+        rejectOnNotFound: true,
+      });
     } catch (error) {
       console.error(error);
       throw new NotFoundException(error);

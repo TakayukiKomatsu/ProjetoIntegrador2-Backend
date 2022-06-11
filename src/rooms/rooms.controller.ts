@@ -9,41 +9,48 @@ import {
 } from '@nestjs/common';
 import { RoomService } from './rooms.service';
 import { Prisma, Room } from '@prisma/client';
+import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Salas')
 @Controller('rooms')
 export class RoomController {
   constructor(private readonly roomService: RoomService) {}
 
-  @Post()
-  create(@Body() createRoomDto: Prisma.RoomCreateInput) {
-    return this.roomService.create(createRoomDto);
+  @Get()
+  async findAll(): Promise<Room[] | null> {
+    return await this.roomService.findAll();
   }
 
-  @Get()
-  findAll(): Promise<Room[] | null> {
-    return this.roomService.findAll();
+  @Post()
+  @ApiBody({ description: 'Dados da sala', required: true, type: Object })
+  async create(@Body() createRoomDto: Prisma.RoomCreateInput) {
+    return await this.roomService.create(createRoomDto);
   }
 
   @Get('/allData')
-  findWithAllData(): Promise<Room[] | null> {
-    return this.roomService.findWithAllData();
+  async findWithAllData(): Promise<Room[] | null> {
+    return await this.roomService.findWithAllData();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: Prisma.RoomWhereUniqueInput) {
-    return this.roomService.findOne(id);
+  @ApiParam({ name: 'id', description: 'Id da sala', type: Number })
+  async findOne(@Param('id') id: Prisma.RoomWhereUniqueInput) {
+    return await this.roomService.findOne(id);
   }
 
   @Put(':id')
-  update(
+  @ApiParam({ name: 'id', description: 'Id da sala', type: Number })
+  @ApiBody({ description: 'Dados da sala', required: true, type: Object })
+  async update(
     @Param('id') id: Prisma.RoomWhereUniqueInput,
     @Body() data: Prisma.RoomUpdateInput,
   ) {
-    return this.roomService.update(id, data);
+    return await this.roomService.update(id, data);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: Prisma.RoomWhereUniqueInput) {
-    return this.roomService.remove(id);
+  @ApiParam({ name: 'id', description: 'Id da sala', type: Number })
+  async remove(@Param('id') id: Prisma.RoomWhereUniqueInput) {
+    return await this.roomService.remove(id);
   }
 }
