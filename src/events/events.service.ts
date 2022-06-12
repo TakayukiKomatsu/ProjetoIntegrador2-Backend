@@ -1,14 +1,19 @@
+import { HttpService } from '@nestjs/axios';
 import {
   BadRequestException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { Event, Prisma } from '@prisma/client';
+import { lastValueFrom, map } from 'rxjs';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class EventsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private readonly httpService: HttpService,
+  ) {}
 
   async create(data: Prisma.EventCreateInput): Promise<Event> {
     try {
@@ -62,5 +67,18 @@ export class EventsService {
       console.error(error);
       throw new NotFoundException(error);
     }
+  }
+
+  async getTemperature(
+    location = 'Sao_Paulo',
+    totalOfDays = 1,
+  ): Promise<any[]> {
+    return await lastValueFrom(
+      this.httpService
+        .get(
+          `http://api.weatherapi.com/v1/forecast.json?key=${process.env.WEATHER_API_KEY}&q=${location}&days=${totalOfDays}&aqi=no&alerts=no`,
+        )
+        .pipe(map((resp) => resp.data)),
+    );
   }
 }
