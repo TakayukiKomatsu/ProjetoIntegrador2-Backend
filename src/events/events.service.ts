@@ -71,14 +71,22 @@ export class EventsService {
 
   async getTemperature(
     location = 'Sao_Paulo',
-    totalOfDays = 1,
-  ): Promise<any[]> {
-    return await lastValueFrom(
+    totalOfDays = 10,
+  ): Promise<GetTemperatureInterface> {
+    const data = await lastValueFrom(
       this.httpService
         .get(
           `http://api.weatherapi.com/v1/forecast.json?key=${process.env.WEATHER_API_KEY}&q=${location}&days=${totalOfDays}&aqi=no&alerts=no`,
         )
         .pipe(map((resp) => resp.data)),
     );
+
+    const currentTemperature = await data?.current?.temp_c;
+    const forecast = await data?.forecast?.forecastday;
+    return {
+      currentTemperature,
+      forecast,
+    };
+  }
   }
 }
