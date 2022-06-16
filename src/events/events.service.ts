@@ -7,6 +7,10 @@ import {
 import { Event, Prisma } from '@prisma/client';
 import { lastValueFrom, map } from 'rxjs';
 import { PrismaService } from '../prisma/prisma.service';
+import { GetTemperatureInterface } from './types';
+
+// tempo necessário para abaixar 1 C
+const TIMExTEMPERATURE = 12;
 
 @Injectable()
 export class EventsService {
@@ -87,6 +91,5 @@ export class EventsService {
       currentTemperature,
       forecast,
     };
-  }
   }
 }
