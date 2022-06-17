@@ -17,7 +17,7 @@ export interface Forecast {
   hour: ForecastDay[];
 }
 
-interface ForecastDay {
+export interface ForecastDay {
   time: string;
   temp_c: number;
 }
