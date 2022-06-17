@@ -12,7 +12,7 @@ datasource db {
 
 model Event {
   id                            Int      @id @default(autoincrement())
-  diaEvent                      DateTime
+  diaEvent                      String
   horaInicio                    String
   horaTermino                   String
   qtdePessoas                   Int
