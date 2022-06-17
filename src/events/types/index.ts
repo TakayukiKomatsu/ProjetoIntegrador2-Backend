@@ -16,3 +16,9 @@ export interface Forecast {
   astro: any;
   hour: any[];
 }
+
+export interface time {
+  hours: number;
+  minutes: number;
+  seconds?: number;
+}
