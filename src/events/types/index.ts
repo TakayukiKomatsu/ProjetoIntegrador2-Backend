@@ -18,6 +18,7 @@ export interface Forecast {
 }
 
 export interface ForecastDay {
+  time_epoch: number;
   time: string;
   temp_c: number;
 }
