@@ -18,7 +18,7 @@ export interface Forecast {
 }
 
 export interface time {
-  hours: number;
-  minutes: number;
+  hours?: number;
+  minutes?: number;
   seconds?: number;
 }
