@@ -14,7 +14,12 @@ export interface Forecast {
     condition: any;
   };
   astro: any;
-  hour: any[];
+  hour: ForecastDay[];
+}
+
+interface ForecastDay {
+  time: string;
+  temp_c: number;
 }
 
 export interface time {
