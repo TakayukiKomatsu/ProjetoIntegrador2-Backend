@@ -1,22 +1,40 @@
-import { add } from 'date-fns';
-import { time } from '../types';
+import { add, format } from 'date-fns';
+import { CustomDate, time } from '../types';
 
-export const timeHandler = (date: string, eventTime: string): Date => {
-  const localDate = new Date(date);
-  const time = timeSplitter(eventTime);
-  return add(localDate, {
-    hours: time?.hours,
-    minutes: time?.minutes,
-    seconds: time?.seconds,
-  });
+export const timeHandler = (day: string, time: string): CustomDate => {
+  const date = new Date(`${day}T${time}`);
+  return {
+    date: date,
+    day: format(date, 'yyyy-LL-dd'),
+    time: format(date, 'HH:mm'),
+    weatherApi: format(date, 'yyyy-LL-dd HH:00'),
+  };
 };
 
-/*Metodo responsável por realizar o split do tempo utilizando o divisor : */
-export const timeSplitter = (time: string): time => {
+export const formatTime = (eventDate: CustomDate, minutes: number) => {
+  const convertedMinutes = minutesToTime(minutes);
+
+  return format(
+    add(eventDate.date, {
+      hours: convertedMinutes.hours,
+      minutes: convertedMinutes.minutes,
+    }),
+    'HH:mm',
+  );
+};
+
+const splitTime = (time: string): time => {
   const splittedTime = time.split(':');
   return {
     hours: Number(splittedTime[0]),
     minutes: Number(splittedTime[1]),
     seconds: Number(splittedTime[2]),
+  };
+};
+
+const minutesToTime = (minutes: number): time => {
+  return {
+    hours: Math.floor(minutes / 60),
+    minutes: minutes % 60,
   };
 };

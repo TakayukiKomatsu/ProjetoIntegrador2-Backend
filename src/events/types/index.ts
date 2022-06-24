@@ -6,7 +6,7 @@ export interface GetTemperatureInterface {
 export type CurrentTemperature = number;
 
 export interface Forecast {
-  date: Date;
+  date: string;
   day: {
     maxtemp_c: number;
     mintemp_c: number;
@@ -27,4 +27,11 @@ export interface time {
   hours?: number;
   minutes?: number;
   seconds?: number;
+}
+
+export interface CustomDate {
+  date: Date;
+  day: string;
+  time: string;
+  weatherApi?: string;
 }
