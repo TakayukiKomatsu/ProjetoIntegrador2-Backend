@@ -6,12 +6,12 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./database/dev.sql"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Event {
-  id                            Int      @id @default(autoincrement())
+  id                            Int    @id @default(autoincrement())
   diaEvent                      String
   horaInicio                    String
   horaTermino                   String
@@ -21,7 +21,7 @@ model Event {
   tempDesejada                  Int
   horaAcionamentoArCondicionado String
   roomId                        Int
-  Room                          Room     @relation(fields: [roomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  Room                          Room   @relation(fields: [roomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Room {
