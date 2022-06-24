@@ -6,7 +6,6 @@ import { SensorsModule } from './sensors/sensors.module';
 
 @Module({
   imports: [EventsModule, RoomModule, SensorsModule],
-  controllers: [],
   providers: [PrismaService],
 })
 export class AppModule {}
