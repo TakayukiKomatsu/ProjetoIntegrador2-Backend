@@ -3,6 +3,7 @@ import { Prisma } from '@prisma/client';
 import { CustomDate, GetTemperatureInterface } from '../types';
 import { formatTime, timeHandler } from './time';
 import { Forecast, ForecastDay } from '../types';
+import { isPast } from 'date-fns';
 
 // tempo necessário para abaixar 1 C
 const TIMExTEMPERATURE = 12;
@@ -23,8 +24,10 @@ export const temperatureHandler = async ({
 
 const findTemperature = async (eventDate: CustomDate) => {
   const { forecast } = await getTemperature();
-  let outsideTemperature: number;
+  let outsideTemperature: number = null;
   forecast.map(({ date, hour }: Forecast) => {
+    if (isPast(eventDate.date)) throw new Error('A data do evento já passou.');
+
     if (date === eventDate.day) {
       hour.map((forecastDay: ForecastDay) => {
         if (forecastDay.time === eventDate.weatherApi) {
@@ -33,6 +36,9 @@ const findTemperature = async (eventDate: CustomDate) => {
       });
     }
   });
+  if (outsideTemperature === null)
+    throw new Error('Não foi possivel encontrar uma temperatura para o evento');
+
   return outsideTemperature;
 };
 

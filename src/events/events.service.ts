@@ -25,7 +25,7 @@ export class EventsService {
       });
     } catch (error) {
       console.error(error);
-      throw new BadRequestException(error);
+      throw new BadRequestException('Não foi possivel cadastrar o evento.');
     }
   }
 
