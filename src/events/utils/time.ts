@@ -1,4 +1,4 @@
-import { add, format } from 'date-fns';
+import { format, sub } from 'date-fns';
 import { CustomDate, time } from '../types';
 
 export const timeHandler = (day: string, time: string): CustomDate => {
@@ -15,7 +15,7 @@ export const formatTime = (eventDate: CustomDate, minutes: number) => {
   const convertedMinutes = minutesToTime(minutes);
 
   return format(
-    add(eventDate.date, {
+    sub(eventDate.date, {
       hours: convertedMinutes.hours,
       minutes: convertedMinutes.minutes,
     }),
