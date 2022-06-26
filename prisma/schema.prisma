@@ -16,9 +16,9 @@ model Event {
   horaInicio                    String
   horaTermino                   String
   qtdePessoas                   Int
-  tempExterna                   Int
-  tempSalaAtual                 Int
-  tempDesejada                  Int
+  tempExterna                   Float
+  tempSalaAtual                 Float?
+  tempDesejada                  Float
   horaAcionamentoArCondicionado String
   roomId                        Int
   Room                          Room   @relation(fields: [roomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -38,7 +38,7 @@ model Room {
 model Sensor {
   id           Int      @id @default(autoincrement())
   tipo         String
-  temperatura  String
+  temperatura  Float
   leitura      DateTime
   interLeitura Int
   roomId       Int
