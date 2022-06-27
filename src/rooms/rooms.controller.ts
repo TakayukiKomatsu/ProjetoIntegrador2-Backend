@@ -27,6 +27,11 @@ export class RoomController {
     return await this.roomService.create(createRoomDto);
   }
 
+  @Get()
+  async findAllDescriptions(): Promise<Room[] | null> {
+    return await this.roomService.findAllDescriptions();
+  }
+
   @Get('/allData')
   async findWithAllData(): Promise<Room[] | null> {
     return await this.roomService.findWithAllData();

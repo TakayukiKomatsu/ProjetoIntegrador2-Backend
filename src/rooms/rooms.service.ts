@@ -27,6 +27,17 @@ export class RoomService {
     }
   }
 
+  async findAllDescriptions(): Promise<any[] | null> {
+    try {
+      return await this.prisma.room.findMany({select: {
+        descricao: true,
+      }})
+    } catch (error) {
+      console.log(error);
+      throw new NotFoundException(error);
+    }
+  }
+
   async findWithAllData(): Promise<Room[] | null> {
     try {
       return await this.prisma.room.findMany({
