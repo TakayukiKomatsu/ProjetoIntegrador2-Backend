@@ -27,7 +27,7 @@ export class RoomController {
     return await this.roomService.create(createRoomDto);
   }
 
-  @Get()
+  @Get('/description')
   async findAllDescriptions(): Promise<Room[] | null> {
     return await this.roomService.findAllDescriptions();
   }
