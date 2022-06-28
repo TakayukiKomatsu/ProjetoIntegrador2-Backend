@@ -39,8 +39,8 @@ model Sensor {
   id           Int      @id @default(autoincrement())
   tipo         String
   temperatura  Float
-  leitura      DateTime
-  interLeitura Int
+  leitura      String
+  interLeitura String
   roomId       Int
   Room         Room     @relation(fields: [roomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
