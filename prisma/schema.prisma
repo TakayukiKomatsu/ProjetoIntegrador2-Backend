@@ -15,7 +15,7 @@ model Event {
   diaEvent                      String
   horaInicio                    String
   horaTermino                   String
-  qtdePessoas                   Int
+  qtdePessoas                   String
   tempExterna                   Float
   tempSalaAtual                 Float?
   tempDesejada                  Float
