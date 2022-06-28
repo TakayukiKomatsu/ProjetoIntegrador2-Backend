@@ -20,6 +20,7 @@ export class EventsService {
         data: {
           tempExterna: temperature,
           horaAcionamentoArCondicionado: time,
+          tempDesejada: Number(data.tempDesejada),
           ...data,
         },
       });
