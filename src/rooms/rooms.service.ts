@@ -29,10 +29,12 @@ export class RoomService {
 
   async findAllDescriptions(): Promise<any[] | null> {
     try {
-      return await this.prisma.room.findMany({select: {
-        id: true,
-        descricao: true,
-      }})
+      return await this.prisma.room.findMany({
+        select: {
+          id: true,
+          descricao: true,
+        },
+      });
     } catch (error) {
       console.log(error);
       throw new NotFoundException(error);
