@@ -24,8 +24,8 @@ export class SensorsController {
 
   @Post()
   @ApiBody({ description: 'Dados do sensor', required: true, type: Object })
-  create(@Body() data: Prisma.SensorCreateInput): Promise<Sensor | null> {
-    return this.sensorsService.create(data);
+  async create(@Body() data: Prisma.SensorCreateInput): Promise<Sensor | null> {
+    return await this.sensorsService.create(data);
   }
 
   @Get('/room')

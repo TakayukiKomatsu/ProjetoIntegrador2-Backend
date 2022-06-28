@@ -9,9 +9,9 @@ import { Prisma, Sensor } from '@prisma/client';
 @Injectable()
 export class SensorsService {
   constructor(private readonly prisma: PrismaService) {}
-  create(data: Prisma.SensorCreateInput): Promise<Sensor | null> {
+  async create(data: Prisma.SensorCreateInput): Promise<Sensor | null> {
     try {
-      return this.prisma.sensor.create({ data });
+      return await this.prisma.sensor.create({ data });
     } catch (error) {
       console.log(error);
       throw new BadRequestException(error);
