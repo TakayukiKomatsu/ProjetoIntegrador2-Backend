@@ -30,6 +30,7 @@ export class RoomService {
   async findAllDescriptions(): Promise<any[] | null> {
     try {
       return await this.prisma.room.findMany({select: {
+        id: true,
         descricao: true,
       }})
     } catch (error) {
