@@ -36,11 +36,11 @@ model Room {
 }
 
 model Sensor {
-  id           Int      @id @default(autoincrement())
+  id           Int    @id @default(autoincrement())
   tipo         String
   temperatura  Float
   leitura      String
   interLeitura String
   roomId       Int
-  Room         Room     @relation(fields: [roomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  Room         Room   @relation(fields: [roomId], references: [id])
 }
