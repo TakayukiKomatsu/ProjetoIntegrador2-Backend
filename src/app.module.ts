@@ -5,6 +5,7 @@ import { RoomModule } from './module/rooms/rooms.module';
 import { SensorsModule } from './module/sensors/sensors.module';
 import { PrismaService } from './prisma/prisma.service';
 import { ConfigModule } from '@nestjs/config';
+import { MqttService } from '@/module/mqtt';
 
 @Module({
   imports: [
@@ -22,6 +23,6 @@ import { ConfigModule } from '@nestjs/config';
       }),
     }),
   ],
-  providers: [PrismaService],
+  providers: [PrismaService, MqttService],
 })
 export class AppModule {}
