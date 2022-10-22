@@ -4,6 +4,6 @@ import { SensorDataController } from './sensor-data.controller';
 
 @Module({
   controllers: [SensorDataController],
-  providers: [SensorDataService]
+  providers: [SensorDataService],
 })
 export class SensorDataModule {}
