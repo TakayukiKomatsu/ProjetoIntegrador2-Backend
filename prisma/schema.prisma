@@ -11,36 +11,41 @@ datasource db {
 }
 
 model Event {
-  id                            Int    @id @default(autoincrement())
-  diaEvent                      String
-  horaInicio                    String
-  horaTermino                   String
-  qtdePessoas                   String
-  tempExterna                   Float
-  tempSalaAtual                 Float?
-  tempDesejada                  Float
-  horaAcionamentoArCondicionado String
-  roomId                        Int
-  Room                          Room   @relation(fields: [roomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id                 Int      @id @default(autoincrement())
+  description        String
+  startDate          DateTime
+  endDate            DateTime
+  amountPeople       Int
+  desiredTemperature Float
+  ACTime             String
+  roomId             Int
+  Room               Room     @relation(fields: [roomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Room {
-  id        Int      @id @default(autoincrement())
-  descricao String
-  pais      String
-  estado    String
-  cidade    String
-  salaLocal String
-  Event     Event[]
-  Sensor    Sensor[]
+  id          Int      @id @default(autoincrement())
+  description String
+  country     String
+  state       String
+  city        String
+  address     String
+  Event       Event[]
+  Sensor      Sensor[]
 }
 
 model Sensor {
-  id           Int    @id @default(autoincrement())
-  tipo         String
-  temperatura  Float
-  leitura      String
-  interLeitura String
-  roomId       Int
-  Room         Room   @relation(fields: [roomId], references: [id])
+  id         Int          @id @default(autoincrement())
+  type       String
+  roomId     Int
+  Room       Room         @relation(fields: [roomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  SensorData SensorData[]
+}
+
+model SensorData {
+  id     Int      @id @default(autoincrement())
+  value  Float
+  time   DateTime
+  sensor Sensor   @relation(fields: [sensorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  sensorId Int
 }
