@@ -32,7 +32,7 @@ export class RoomService {
       return await this.prisma.room.findMany({
         select: {
           id: true,
-          description: true,
+          descricao: true,
         },
       });
     } catch (error) {

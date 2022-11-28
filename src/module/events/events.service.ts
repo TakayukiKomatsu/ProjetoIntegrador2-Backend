@@ -12,8 +12,14 @@ export class EventsService {
 
   async create(data: Prisma.EventCreateInput): Promise<Event> {
     try {
+      const { temperature, time } = await temperatureUtils.temperatureHandler(
+        data,
+      );
       return await this.prisma.event.create({
         data: {
+          tempExterna: temperature,
+          horaAcionamentoArCondicionado: time,
+          tempDesejada: Number(data.tempDesejada),
           ...data,
         },
       });
