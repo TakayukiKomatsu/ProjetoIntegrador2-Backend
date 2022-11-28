@@ -1,14 +1,8 @@
-import { format, sub } from 'date-fns';
-import { CustomDate, time } from '../types';
+import { format, sub, differenceInMinutes } from 'date-fns';
+import { CustomDate, time } from '@/types';
 
-export const timeHandler = (day: string, time: string): CustomDate => {
-  const date = new Date(`${day}T${time}`);
-  return {
-    date: date,
-    day: format(date, 'yyyy-LL-dd'),
-    time: format(date, 'HH:mm'),
-    weatherApi: format(date, 'yyyy-LL-dd HH:00'),
-  };
+export const timeHandler = (start: Date, end: Date): number => {
+  return differenceInMinutes(start, end);
 };
 
 export const formatTime = (eventDate: CustomDate, minutes: number) => {
@@ -23,7 +17,7 @@ export const formatTime = (eventDate: CustomDate, minutes: number) => {
   );
 };
 
-const splitTime = (time: string): time => {
+export const splitTime = (time: string): time => {
   const splittedTime = time.split(':');
   return {
     hours: Number(splittedTime[0]),
@@ -32,7 +26,7 @@ const splitTime = (time: string): time => {
   };
 };
 
-const minutesToTime = (minutes: number): time => {
+export const minutesToTime = (minutes: number): time => {
   return {
     hours: Math.floor(minutes / 60),
     minutes: minutes % 60,

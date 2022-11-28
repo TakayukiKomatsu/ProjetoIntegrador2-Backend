@@ -1,28 +1,33 @@
 import axios from 'axios';
 import { Prisma } from '@prisma/client';
-import { CustomDate, GetTemperatureInterface } from '../types';
 import { formatTime, timeHandler } from './time';
-import { Forecast, ForecastDay } from '../types';
 import { isPast } from 'date-fns';
+import {
+  CustomDate,
+  Forecast,
+  ForecastDay,
+  GetTemperatureInterface,
+} from '@/types';
 
 // tempo necessário para abaixar 1 C
 const TIMExTEMPERATURE = 12;
 
 export const temperatureHandler = async ({
-  tempDesejada,
-  diaEvent,
-  horaInicio,
+  startDate,
+  endDate,
 }: Prisma.EventCreateInput) => {
-  const eventDate = timeHandler(diaEvent, horaInicio);
-  const temperature = await findTemperature(eventDate);
-  const time = timeToReachTemperature(eventDate, tempDesejada, temperature);
-  return {
-    temperature,
-    time,
-  };
+  const differenceInMinutes = timeHandler(
+    new Date(startDate),
+    new Date(endDate),
+  );
+
+  // return {
+  //   temperature,
+  //   time,
+  // };
 };
 
-const findTemperature = async (eventDate: CustomDate) => {
+const findTemperature = async (eventDate: Date) => {
   const { forecast } = await getTemperature();
   let outsideTemperature: number = null;
   forecast.map(({ date, hour }: Forecast) => {
@@ -37,7 +42,7 @@ const findTemperature = async (eventDate: CustomDate) => {
     }
   });
   if (outsideTemperature === null)
-    throw new Error('Não foi possivel encontrar uma temperatura para o evento');
+    throw new Error('Não foi possível encontrar uma temperatura para o evento');
 
   return outsideTemperature;
 };
