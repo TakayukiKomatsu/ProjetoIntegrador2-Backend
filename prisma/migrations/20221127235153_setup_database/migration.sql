@@ -4,10 +4,10 @@ CREATE TABLE "Event" (
     "diaEvent" TEXT NOT NULL,
     "horaInicio" TEXT NOT NULL,
     "horaTermino" TEXT NOT NULL,
-    "qtdePessoas" INTEGER NOT NULL,
-    "tempExterna" INTEGER NOT NULL,
-    "tempSalaAtual" INTEGER NOT NULL,
-    "tempDesejada" INTEGER NOT NULL,
+    "qtdePessoas" TEXT NOT NULL,
+    "tempExterna" DOUBLE PRECISION NOT NULL,
+    "tempSalaAtual" DOUBLE PRECISION,
+    "tempDesejada" DOUBLE PRECISION NOT NULL,
     "horaAcionamentoArCondicionado" TEXT NOT NULL,
     "roomId" INTEGER NOT NULL,
 
@@ -30,9 +30,9 @@ CREATE TABLE "Room" (
 CREATE TABLE "Sensor" (
     "id" SERIAL NOT NULL,
     "tipo" TEXT NOT NULL,
-    "temperatura" TEXT NOT NULL,
-    "leitura" TIMESTAMP(3) NOT NULL,
-    "interLeitura" INTEGER NOT NULL,
+    "temperatura" DOUBLE PRECISION NOT NULL,
+    "leitura" TEXT NOT NULL,
+    "interLeitura" TEXT NOT NULL,
     "roomId" INTEGER NOT NULL,
 
     CONSTRAINT "Sensor_pkey" PRIMARY KEY ("id")
@@ -42,4 +42,4 @@ CREATE TABLE "Sensor" (
 ALTER TABLE "Event" ADD CONSTRAINT "Event_roomId_fkey" FOREIGN KEY ("roomId") REFERENCES "Room"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Sensor" ADD CONSTRAINT "Sensor_roomId_fkey" FOREIGN KEY ("roomId") REFERENCES "Room"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Sensor" ADD CONSTRAINT "Sensor_roomId_fkey" FOREIGN KEY ("roomId") REFERENCES "Room"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
