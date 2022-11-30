@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { Event, Prisma } from '@prisma/client';
 import { PrismaService } from '@/prisma/prisma.service';
+import { parseISO } from 'date-fns';
 
 @Injectable()
 export class EventsService {
@@ -12,14 +13,10 @@ export class EventsService {
 
   async create(data: Prisma.EventCreateInput): Promise<Event> {
     try {
-      const { temperature, time } = await temperatureUtils.temperatureHandler(
-        data,
-      );
       return await this.prisma.event.create({
         data: {
-          tempExterna: temperature,
-          horaAcionamentoArCondicionado: time,
-          tempDesejada: Number(data.tempDesejada),
+          startDate: parseISO(data.startDate as string),
+          endDate: parseISO(data.endDate as string),
           ...data,
         },
       });
