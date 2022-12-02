@@ -1,28 +1,49 @@
-FROM node:16-alpine as builder
+###################
+# BUILD FOR LOCAL DEVELOPMENT
+###################
+FROM node:18-alpine As development
 
-ENV NODE_ENV build
+WORKDIR /usr/src/app
 
-USER node
-WORKDIR /home/node
+COPY --chown=node:node package.json ./
+COPY --chown=node:node yarn.lock ./
 
-COPY package*.json ./
-RUN yarn install
+RUN yarn
 
 COPY --chown=node:node . .
-RUN npm run build \
-    && npm prune --production
 
-# ---
+USER node
 
-FROM node:16-alpine
+
+###################
+# BUILD FOR PRODUCTION
+###################
+FROM node:18-alpine As build
+
+WORKDIR /usr/src/app
+
+COPY --chown=node:node package.json ./
+COPY --chown=node:node yarn.lock ./
+
+COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules
+
+COPY --chown=node:node . .
+
+RUN yarn build
 
 ENV NODE_ENV production
 
+RUN yarn install --frozen-lockfile --production && yarn cache clean
+
 USER node
-WORKDIR /home/node
 
-COPY --from=builder --chown=node:node /home/node/package*.json ./
-COPY --from=builder --chown=node:node /home/node/node_modules/ ./node_modules/
-COPY --from=builder --chown=node:node /home/node/dist/ ./dist/
 
-CMD ["node", "dist/server.js"]
+###################
+# PRODUCTION
+###################
+FROM node:18-alpine As production
+
+COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
+COPY --chown=node:node --from=build /usr/src/app/dist ./dist
+
+CMD [ "node", "dist/main.js" ]
