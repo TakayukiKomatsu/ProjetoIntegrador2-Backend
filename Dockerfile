@@ -7,6 +7,7 @@ WORKDIR /usr/src/app
 
 COPY --chown=node:node package.json ./
 COPY --chown=node:node yarn.lock ./
+COPY --chown=node:node tsconfig.build.json ./
 
 RUN yarn
 
