@@ -7,22 +7,41 @@ import { Event, Prisma } from '@prisma/client';
 import { PrismaService } from '@/prisma/prisma.service';
 import { parseISO } from 'date-fns';
 
+import {
+  getTemperature,
+  findTemperature,
+  timeToReachTemperature,
+} from '../shared';
+
 @Injectable()
 export class EventsService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: Prisma.EventCreateInput): Promise<Event> {
     try {
+      const temperatureList = await (await getTemperature()).temperatures;
+      const selectedTemperature = await findTemperature(
+        parseISO(data.startDate as string),
+        temperatureList,
+      );
+
+      const acTime = timeToReachTemperature(
+        parseISO(data.startDate as string),
+        25,
+        selectedTemperature.value,
+      );
+
       return await this.prisma.event.create({
         data: {
           startDate: parseISO(data.startDate as string),
           endDate: parseISO(data.endDate as string),
+          ACTime: acTime.toISOString(),
           ...data,
         },
       });
     } catch (error) {
       console.error(error);
-      throw new BadRequestException('Não foi possivel cadastrar o evento.');
+      throw new BadRequestException('Não foi possível cadastrar o evento.');
     }
   }
 

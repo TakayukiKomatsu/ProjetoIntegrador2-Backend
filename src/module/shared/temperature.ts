@@ -1,76 +1,43 @@
 import axios from 'axios';
-import { Prisma } from '@prisma/client';
-import { formatTime, timeHandler } from './time';
-import { isPast } from 'date-fns';
-import {
-  CustomDate,
-  Forecast,
-  ForecastDay,
-  GetTemperatureInterface,
-} from '@/types';
+import { isPast, isEqual, sub, isSameHour } from 'date-fns';
+import { ForecastValue, GetTemperatureInterface } from '@/types';
 
 // tempo necessário para abaixar 1 C
 const TIMExTEMPERATURE = 12;
 
-export const temperatureHandler = async ({
-  startDate,
-  endDate,
-}: Prisma.EventCreateInput) => {
-  const differenceInMinutes = timeHandler(
-    new Date(startDate),
-    new Date(endDate),
+export const getTemperature = async (
+  city_id = 3477,
+): Promise<GetTemperatureInterface> => {
+  const { data } = await axios.get(
+    `http://apiadvisor.climatempo.com.br/api/v2/forecast/temperature/locale/${city_id}/hours/168?token=${process.env.CLIMA_TEMPO_TOKEN}`,
+  );
+  const temperatures = await data?.temperatures;
+  return {
+    temperatures,
+  };
+};
+
+export const findTemperature = async (
+  eventDate: Date,
+  temperatureList: ForecastValue[],
+) => {
+  if (isPast(eventDate)) throw new Error('A data do evento já passou.');
+
+  const filteredDate = temperatureList.find((element) =>
+    isSameHour(new Date(element.date), eventDate),
   );
 
-  // return {
-  //   temperature,
-  //   time,
-  // };
+  return filteredDate;
 };
 
-const findTemperature = async (eventDate: Date) => {
-  const { forecast } = await getTemperature();
-  let outsideTemperature: number = null;
-  forecast.map(({ date, hour }: Forecast) => {
-    if (isPast(eventDate.date)) throw new Error('A data do evento já passou.');
-
-    if (date === eventDate.day) {
-      hour.map((forecastDay: ForecastDay) => {
-        if (forecastDay.time === eventDate.weatherApi) {
-          outsideTemperature = forecastDay.temp_c;
-        }
-      });
-    }
-  });
-  if (outsideTemperature === null)
-    throw new Error('Não foi possível encontrar uma temperatura para o evento');
-
-  return outsideTemperature;
-};
-
-const timeToReachTemperature = (
-  eventDate: CustomDate,
-  idealTemperature: number,
+export const timeToReachTemperature = (
+  startDate: Date,
+  desiredTemperature: number,
   actualTemperature: number,
 ) => {
   const minutes = Math.ceil(
-    Math.abs(idealTemperature - actualTemperature) * TIMExTEMPERATURE,
+    Math.abs(desiredTemperature - actualTemperature) * TIMExTEMPERATURE,
   );
 
-  return formatTime(eventDate, minutes);
-};
-
-export const getTemperature = async (
-  location = 'Sao_Paulo',
-  totalOfDays = 10,
-): Promise<GetTemperatureInterface> => {
-  const { data } = await axios.get(
-    `http://api.weatherapi.com/v1/forecast.json?key=${process.env.WEATHER_API_KEY}&q=${location}&days=${totalOfDays}&aqi=no&alerts=no`,
-  );
-
-  const currentTemperature = await data?.current?.temp_c;
-  const forecast = await data?.forecast?.forecastday;
-  return {
-    currentTemperature,
-    forecast,
-  };
+  return sub(startDate, { minutes });
 };

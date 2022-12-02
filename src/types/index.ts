@@ -1,37 +1,18 @@
 export interface GetTemperatureInterface {
-  currentTemperature: CurrentTemperature;
-  forecast: Forecast[];
+  temperatures: ForecastValue[];
 }
 
 export type CurrentTemperature = number;
 
 export interface Forecast {
-  date: string;
-  day: {
-    maxtemp_c: number;
-    mintemp_c: number;
-    avgtemp_c: number;
-    condition: any;
-  };
-  astro: any;
-  hour: ForecastDay[];
+  id: number;
+  name: string;
+  state: string;
+  country: string;
+  temperatures: ForecastValue[];
 }
 
-export interface ForecastDay {
-  time_epoch: number;
-  time: string;
-  temp_c: number;
-}
-
-export interface time {
-  hours?: number;
-  minutes?: number;
-  seconds?: number;
-}
-
-export interface CustomDate {
+export interface ForecastValue {
   date: Date;
-  day: string;
-  time: string;
-  weatherApi?: string;
+  value: number;
 }
