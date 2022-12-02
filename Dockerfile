@@ -31,11 +31,10 @@ COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modul
 
 COPY --chown=node:node . .
 
-RUN npx prisma generate
 
 ENV NODE_ENV production
 
-RUN yarn install --frozen-lockfile --production && yarn cache clean
+RUN yarn && npx prisma generate
 
 USER node
 
