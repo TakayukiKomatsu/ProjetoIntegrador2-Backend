@@ -1,6 +1,6 @@
 import { PrismaService } from '@/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
-import { Subscribe, Payload, Params } from 'nest-mqtt';
+import { Subscribe, Payload, Params, Topic } from 'nest-mqtt';
 
 type sensorData = [string, number];
 
@@ -9,7 +9,12 @@ export class MqttService {
   constructor(private prisma: PrismaService) {}
 
   @Subscribe('sensors/+/temperature/+')
-  async sensor(@Payload() payload, @Params() param: sensorData) {
+  async sensor(
+    @Payload() payload,
+    @Params() param: sensorData,
+    @Topic() topic: string,
+  ) {
+    console.log('🚀 ~ file: mqtt.service.ts:17 ~ MqttService ~ topic', topic);
     console.log(`param: ${param} | payload: ${payload}`);
 
     if (!payload) return null;
@@ -19,11 +24,7 @@ export class MqttService {
         time: new Date(),
         topic: param[0],
         value: payload,
-        sensor: {
-          connect: {
-            id: Number(param[1]),
-          },
-        },
+        sensorId: Number(param[1]),
       },
     });
   }
