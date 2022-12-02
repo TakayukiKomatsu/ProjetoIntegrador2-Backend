@@ -1,48 +1,28 @@
-###################
-# BUILD FOR LOCAL DEVELOPMENT
-###################
+FROM node:16-alpine as builder
 
-FROM node:18-alpine As development
-
-WORKDIR /usr/src/app
-
-COPY --chown=node:node package*.json ./
-
-RUN yarn install
-
-COPY --chown=node:node . .
+ENV NODE_ENV build
 
 USER node
+WORKDIR /home/node
 
-###################
-# BUILD FOR PRODUCTION
-###################
-
-FROM node:18-alpine As build
-
-WORKDIR /usr/src/app
-
-COPY --chown=node:node package*.json ./
-
-COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules
+COPY package*.json ./
+RUN npm ci
 
 COPY --chown=node:node . .
+RUN npm run build \
+    && npm prune --production
 
-RUN npm run build
+# ---
+
+FROM node:16-alpine
 
 ENV NODE_ENV production
 
-RUN yarn install --only=production && npm cache clean --force
-
 USER node
+WORKDIR /home/node
 
-###################
-# PRODUCTION
-###################
+COPY --from=builder --chown=node:node /home/node/package*.json ./
+COPY --from=builder --chown=node:node /home/node/node_modules/ ./node_modules/
+COPY --from=builder --chown=node:node /home/node/dist/ ./dist/
 
-FROM node:18-alpine As production
-
-COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
-COPY --chown=node:node --from=build /usr/src/app/dist ./dist
-
-CMD [ "node", "dist/main.js" ]
+CMD ["node", "dist/server.js"]
