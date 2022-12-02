@@ -33,9 +33,6 @@ COPY --chown=node:node . .
 
 RUN yarn postinstall
 
-
-RUN yarn build
-
 ENV NODE_ENV production
 
 RUN yarn install --frozen-lockfile --production && yarn cache clean
@@ -48,7 +45,6 @@ USER node
 ###################
 FROM node:18-alpine As production
 
-RUN yarn postinstall
 COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 
