@@ -8,7 +8,7 @@ WORKDIR /usr/src/app
 
 COPY --chown=node:node package*.json ./
 
-RUN npm install
+RUN yarn install
 
 COPY --chown=node:node . .
 
@@ -32,7 +32,7 @@ RUN npm run build
 
 ENV NODE_ENV production
 
-RUN npm install --only=production && npm cache clean --force
+RUN yarn install --only=production && npm cache clean --force
 
 USER node
 
