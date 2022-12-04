@@ -11,14 +11,20 @@ import {
   getTemperature,
   findTemperature,
   timeToReachTemperature,
+  formatTime,
 } from '../shared';
 
 @Injectable()
 export class EventsService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: Prisma.EventCreateInput): Promise<Event> {
+  async create(payload: Prisma.EventCreateInput): Promise<Event> {
     try {
+      const data = {
+        startDate: formatTime(payload.startDate as string),
+        endDate: formatTime(payload.startDate as string),
+        ...payload,
+      };
       const temperatureList = await (await getTemperature()).temperatures;
       const selectedTemperature = await findTemperature(
         parseISO(data.startDate as string),
@@ -27,7 +33,7 @@ export class EventsService {
 
       const acTime = timeToReachTemperature(
         parseISO(data.startDate as string),
-        25,
+        data.desiredTemperature,
         selectedTemperature.value,
       );
 

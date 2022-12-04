@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { isPast, isEqual, sub, isSameHour } from 'date-fns';
+import { isPast, addHours, sub, isSameHour, parseISO } from 'date-fns';
 import { ForecastValue, GetTemperatureInterface } from '@/types';
 
 // tempo necessário para abaixar 1 C
@@ -40,4 +40,8 @@ export const timeToReachTemperature = (
   );
 
   return sub(startDate, { minutes });
+};
+
+export const formatTime = (date: string): Date => {
+  return addHours(new Date(date), 3);
 };
