@@ -6,7 +6,13 @@ import { AppModule } from './app.module';
 dotenv.config();
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: false });
+  const app = await NestFactory.create(AppModule, {
+    cors: {
+      origin: '*',
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      credentials: false,
+    },
+  });
   const config = new DocumentBuilder()
     .setTitle('[Backend] - Controle de temperatura')
     .setDescription('Projeto integrador 2')
