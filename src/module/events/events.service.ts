@@ -8,10 +8,10 @@ import { PrismaService } from '@/prisma/prisma.service';
 import { parseISO } from 'date-fns';
 
 import {
-  getTemperature,
   findTemperature,
-  timeToReachTemperature,
   formatTime,
+  getTemperature,
+  timeToReachTemperature,
 } from '../shared';
 
 @Injectable()
@@ -62,9 +62,8 @@ export class EventsService {
 
   async findOne(eventId: Prisma.EventWhereUniqueInput): Promise<Event | null> {
     try {
-      return this.prisma.event.findUnique({
+      return this.prisma.event.findUniqueOrThrow({
         where: { id: Number(eventId) },
-        rejectOnNotFound: true,
       });
     } catch (error) {
       console.error(error);

@@ -1,6 +1,6 @@
 import { PrismaService } from '@/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
-import { Subscribe, Payload, Params, Topic } from 'nest-mqtt';
+import { Params, Payload, Subscribe, Topic } from 'nest-mqtt';
 
 type sensorData = [string, number];
 
